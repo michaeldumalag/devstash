@@ -4,25 +4,15 @@ Phase 1 of 3 for the dashboard UI layout. Sets up ShadCN, global styles, the das
 
 ## Status
 
-In Progress
+Completed
 
 ## Goals
 
-- ShadCN UI initialization and components
-- ShadCN component installation
-- Dashboard route at /dashboard
-- Main dashboard layout and any global styles
-- Dark mode by default
-- Top bar with search and new item button (display only)
-- Placeholder for sidebar and main area. Just add an h2 with "Sidebar" and "Main" for now.
+<!-- cleared -->
 
 ## References
 
-- @context/screenshots/dashboard-ui-main.png
-- @context/project-overview.md
-- @src/lib/mock-data.ts
-- @context/features/dashboard-phase-2-spec.md
-- @context/features/dashboard-phase-3-spec.md
+<!-- cleared -->
 
 # Notes
 
@@ -34,3 +24,4 @@ In Progress
 
 - **2026-03-25** — Initial Next.js and Tailwind CSS setup. Removed default Next.js public assets, added project context docs, configured CLAUDE.md.
 - **2026-04-01** — Started Dashboard UI Phase 1.
+- **2026-04-01** — Completed Dashboard UI Phase 1. Set up ShadCN UI, dashboard route, global styles, dark mode, top bar with search and new item button, and sidebar/main area placeholders.
