@@ -8,7 +8,7 @@ A developer knowledge hub for snippets, commands, prompts, notes, files, images,
 
 Read the follwoing to get the full context of the project:
 
-- @context/project-verview.md
+- @context/project-overview.md
 - @context/coding-standards.md
 - @context/ai-interaction.md
 - @context/current-feature.md

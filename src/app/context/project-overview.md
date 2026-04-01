@@ -1,3 +1,9 @@
+## DevStash Project Specifications
+
+🚀 **Centralized Developer Knowledge Hub** for code snippets, AI prompts, docs, commands & more.
+
+---
+
 # DevStash — Project Overview
 
 > **One fast, searchable, AI-enhanced hub for all dev knowledge & resources.**
@@ -543,3 +549,10 @@ R2_PUBLIC_URL=
 # OpenAI
 OPENAI_API_KEY=
 ```
+
+### Screenshots
+
+Refer to the screenshots below as a base for the dashboard UI. It does not have to be exact.  Use it as a reference
+
+- @context/screenshots/dashboard-ui-main.png
+- @context/screenshots/dashboard-ui-drawer.png
