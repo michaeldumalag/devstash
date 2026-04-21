@@ -1,36 +1,20 @@
-import { mockCollections, mockItems, mockItemTypeCounts } from '@/lib/mock-data';
+import { getDashboardStats } from '@/lib/db/items';
 import { Card, CardContent } from '@/components/ui/card';
 import { Layers, FolderOpen, Star, Bookmark } from 'lucide-react';
 
-const totalItems = Object.values(mockItemTypeCounts).reduce((a, b) => a + b, 0);
+export async function StatsCards() {
+  const stats = await getDashboardStats();
 
-const stats = [
-  {
-    label: 'Total Items',
-    value: totalItems,
-    icon: Layers,
-  },
-  {
-    label: 'Collections',
-    value: mockCollections.length,
-    icon: FolderOpen,
-  },
-  {
-    label: 'Favorite Items',
-    value: mockItems.filter((i) => i.isFavorite).length,
-    icon: Star,
-  },
-  {
-    label: 'Favorite Collections',
-    value: mockCollections.filter((c) => c.isFavorite).length,
-    icon: Bookmark,
-  },
-];
+  const cards = [
+    { label: 'Total Items', value: stats.totalItems, icon: Layers },
+    { label: 'Collections', value: stats.totalCollections, icon: FolderOpen },
+    { label: 'Favorite Items', value: stats.favoriteItems, icon: Star },
+    { label: 'Favorite Collections', value: stats.favoriteCollections, icon: Bookmark },
+  ];
 
-export function StatsCards() {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {stats.map(({ label, value, icon: Icon }) => (
+      {cards.map(({ label, value, icon: Icon }) => (
         <Card key={label}>
           <CardContent className="p-4 flex flex-col gap-2">
             <div className="flex items-center justify-between">
