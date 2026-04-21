@@ -33,3 +33,5 @@
 - **2026-04-21** — Completed Seed Data. Demo user, 7 system item types, 5 collections, 18 items, and 39 tags seeded. bcryptjs hash computed for future auth integration.
 - **2026-04-21** — Started Dashboard Collections feature. Replacing mock collection data with real Prisma/Neon data.
 - **2026-04-21** — Completed Dashboard Collections. Created `src/lib/db/collections.ts`, converted `DashboardMain` to async server component, updated `CollectionCard` with dominant-color left border strip and per-type icons at the bottom.
+- **2026-04-21** — Started Dashboard Items feature. Replacing mock item data with real Prisma/Neon data for pinned and recent items.
+- **2026-04-21** — Completed Dashboard Items. Created `src/lib/db/items.ts` (getPinnedItems, getRecentItems, getDashboardStats), updated ItemRow to use type icon/color from DB, updated StatsCards to be async server component with real counts, updated DashboardMain to fetch all data from Neon.

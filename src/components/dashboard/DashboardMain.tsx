@@ -1,18 +1,17 @@
 import Link from 'next/link';
-import { mockItems } from '@/lib/mock-data';
 import { getRecentCollections } from '@/lib/db/collections';
+import { getPinnedItems, getRecentItems } from '@/lib/db/items';
 import { StatsCards } from './StatsCards';
 import { CollectionCard } from './CollectionCard';
 import { ItemRow } from './ItemRow';
 
-const pinnedItems = mockItems.filter((i) => i.isPinned);
-
-const recentItems = [...mockItems]
-  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  .slice(0, 10);
-
 export async function DashboardMain() {
-  const recentCollections = await getRecentCollections();
+  const [recentCollections, pinnedItems, recentItems] = await Promise.all([
+    getRecentCollections(),
+    getPinnedItems(),
+    getRecentItems(),
+  ]);
+
   return (
     <div className="p-6 space-y-8 max-w-5xl">
       {/* Heading */}
@@ -58,7 +57,9 @@ export async function DashboardMain() {
                 key={item.id}
                 title={item.title}
                 description={item.description}
-                itemTypeId={item.itemTypeId}
+                typeIcon={item.typeIcon}
+                typeColor={item.typeColor}
+                typeName={item.typeName}
                 tags={item.tags}
                 isFavorite={item.isFavorite}
                 isPinned={item.isPinned}
@@ -78,7 +79,9 @@ export async function DashboardMain() {
               key={item.id}
               title={item.title}
               description={item.description}
-              itemTypeId={item.itemTypeId}
+              typeIcon={item.typeIcon}
+              typeColor={item.typeColor}
+              typeName={item.typeName}
               tags={item.tags}
               isFavorite={item.isFavorite}
               isPinned={item.isPinned}
