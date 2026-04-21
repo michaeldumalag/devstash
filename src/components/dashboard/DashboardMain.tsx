@@ -1,12 +1,9 @@
 import Link from 'next/link';
-import { mockCollections, mockItems } from '@/lib/mock-data';
+import { mockItems } from '@/lib/mock-data';
+import { getRecentCollections } from '@/lib/db/collections';
 import { StatsCards } from './StatsCards';
 import { CollectionCard } from './CollectionCard';
 import { ItemRow } from './ItemRow';
-
-const recentCollections = [...mockCollections].sort(
-  (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-);
 
 const pinnedItems = mockItems.filter((i) => i.isPinned);
 
@@ -14,7 +11,8 @@ const recentItems = [...mockItems]
   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   .slice(0, 10);
 
-export function DashboardMain() {
+export async function DashboardMain() {
+  const recentCollections = await getRecentCollections();
   return (
     <div className="p-6 space-y-8 max-w-5xl">
       {/* Heading */}
@@ -43,6 +41,8 @@ export function DashboardMain() {
               description={col.description}
               itemCount={col.itemCount}
               isFavorite={col.isFavorite}
+              dominantColor={col.dominantColor}
+              typeIcons={col.typeIcons}
             />
           ))}
         </div>
