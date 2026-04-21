@@ -31,3 +31,5 @@
 - **2026-04-03** — Completed Prisma 7 + Neon PostgreSQL setup. Full schema, initial migration, system item type seed, and db test script.
 - **2026-04-03** — Started Seed Data feature.
 - **2026-04-21** — Completed Seed Data. Demo user, 7 system item types, 5 collections, 18 items, and 39 tags seeded. bcryptjs hash computed for future auth integration.
+- **2026-04-21** — Started Dashboard Collections feature. Replacing mock collection data with real Prisma/Neon data.
+- **2026-04-21** — Completed Dashboard Collections. Created `src/lib/db/collections.ts`, converted `DashboardMain` to async server component, updated `CollectionCard` with dominant-color left border strip and per-type icons at the bottom.
