@@ -1,18 +1,22 @@
 ## Current Feature
 
-<!-- No active feature -->
+Stats & Sidebar
 
 ## Status
 
-<!-- pending -->
+completed
 
 ## Goals
 
-<!-- cleared -->
+- Display stats from real database data, keeping the current design/layout
+- Display item types in sidebar with their icons, linking to `/items/[typename]`
+- Add "View all collections" link under the collections list that goes to `/collections`
+- Keep star icons for favorite collections; for recents, show a colored circle based on the most-used item type in that collection
 
 ## References
 
-<!-- cleared -->
+- [stats-sidebar-spec.md](features/stats-sidebar-spec.md)
+- [src/lib/db/collections.ts](../../../lib/db/collections.ts)
 
 # Notes
 
@@ -35,3 +39,5 @@
 - **2026-04-21** — Completed Dashboard Collections. Created `src/lib/db/collections.ts`, converted `DashboardMain` to async server component, updated `CollectionCard` with dominant-color left border strip and per-type icons at the bottom.
 - **2026-04-21** — Started Dashboard Items feature. Replacing mock item data with real Prisma/Neon data for pinned and recent items.
 - **2026-04-21** — Completed Dashboard Items. Created `src/lib/db/items.ts` (getPinnedItems, getRecentItems, getDashboardStats), updated ItemRow to use type icon/color from DB, updated StatsCards to be async server component with real counts, updated DashboardMain to fetch all data from Neon.
+- **2026-04-22** — Started Stats & Sidebar feature. Wiring real DB data into stats cards and sidebar item types/collections.
+- **2026-04-28** — Completed Stats & Sidebar. Added `getItemTypesWithCounts` and `getSidebarCollections` to DB layer; created `SidebarContext` for collapse state, `SidebarServer` async server component, and `sidebar-context.tsx`; refactored `Sidebar` to use real DB data with colored circles on recent collections and "View all collections" link; updated `DashboardShell` to accept `sidebarSlot` and provide context; updated `DashboardPage` to wire it all together.

@@ -4,9 +4,14 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, PanelLeft, X } from 'lucide-react';
-import { Sidebar } from './Sidebar';
+import { SidebarContext } from './sidebar-context';
 
-export function DashboardShell({ children }: { children: React.ReactNode }) {
+interface DashboardShellProps {
+  children: React.ReactNode;
+  sidebarSlot: React.ReactNode;
+}
+
+export function DashboardShell({ children, sidebarSlot }: DashboardShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopCollapsed, setDesktopCollapsed] = useState(false);
 
@@ -82,13 +87,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             </button>
           </div>
           <div className="flex-1 overflow-hidden">
-            <Sidebar />
+            <SidebarContext.Provider value={{ collapsed: false, onToggle: undefined }}>
+              {sidebarSlot}
+            </SidebarContext.Provider>
           </div>
         </div>
 
         {/* Desktop sidebar */}
         <div className="hidden md:flex h-full shrink-0">
-          <Sidebar collapsed={desktopCollapsed} onToggle={() => setDesktopCollapsed((v) => !v)} />
+          <SidebarContext.Provider value={{ collapsed: desktopCollapsed, onToggle: () => setDesktopCollapsed((v) => !v) }}>
+            {sidebarSlot}
+          </SidebarContext.Provider>
         </div>
 
         {/* Main content */}
