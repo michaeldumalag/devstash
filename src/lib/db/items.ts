@@ -86,3 +86,26 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   ]);
   return { totalItems, totalCollections, favoriteItems, favoriteCollections };
 }
+
+export type ItemTypeWithCount = {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  count: number;
+};
+
+export async function getItemTypesWithCounts(): Promise<ItemTypeWithCount[]> {
+  const types = await prisma.itemType.findMany({
+    where: { isSystem: true },
+    include: { _count: { select: { items: true } } },
+    orderBy: { name: 'asc' },
+  });
+  return types.map((t) => ({
+    id: t.id,
+    name: t.name,
+    icon: t.icon,
+    color: t.color,
+    count: t._count.items,
+  }));
+}

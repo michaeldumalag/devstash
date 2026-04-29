@@ -15,12 +15,9 @@ import {
   Settings,
   PanelLeft,
 } from 'lucide-react';
-import {
-  mockUser,
-  mockItemTypes,
-  mockItemTypeCounts,
-  mockCollections,
-} from '@/lib/mock-data';
+import { useSidebarContext } from './sidebar-context';
+import type { ItemTypeWithCount } from '@/lib/db/items';
+import type { SidebarCollection } from '@/lib/db/collections';
 
 const ICON_MAP = {
   Code,
@@ -35,23 +32,17 @@ const ICON_MAP = {
 type IconName = keyof typeof ICON_MAP;
 
 interface SidebarProps {
-  collapsed?: boolean;
-  onToggle?: () => void;
+  itemTypes: ItemTypeWithCount[];
+  collections: SidebarCollection[];
 }
 
-export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
+export function Sidebar({ itemTypes, collections }: SidebarProps) {
+  const { collapsed, onToggle } = useSidebarContext();
   const [typesOpen, setTypesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
 
-  const favoriteCollections = mockCollections.filter((c) => c.isFavorite);
-  const recentCollections = mockCollections
-    .filter((c) => !c.isFavorite)
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-
-  const initials = mockUser.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('');
+  const favoriteCollections = collections.filter((c) => c.isFavorite);
+  const recentCollections = collections.filter((c) => !c.isFavorite);
 
   return (
     <div
@@ -93,9 +84,8 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
 
           {(typesOpen || collapsed) && (
             <nav className="mt-1 space-y-0.5 px-1">
-              {mockItemTypes.map((type) => {
+              {itemTypes.map((type) => {
                 const Icon = ICON_MAP[type.icon as IconName];
-                const count = mockItemTypeCounts[type.id];
                 const label = `${type.name}s`;
 
                 return (
@@ -113,7 +103,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
                     {!collapsed && (
                       <>
                         <span className="flex-1 capitalize">{label}</span>
-                        <span className="text-xs text-sidebar-foreground/40">{count}</span>
+                        <span className="text-xs text-sidebar-foreground/40">{type.count}</span>
                       </>
                     )}
                   </Link>
@@ -139,40 +129,61 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
             {collectionsOpen && (
               <div className="mt-1">
                 {/* Favorites */}
-                <p className="px-3 pb-1 pt-1.5 text-[10px] uppercase tracking-wider text-sidebar-foreground/40">
-                  Favorites
-                </p>
-                <nav className="space-y-0.5 px-1">
-                  {favoriteCollections.map((col) => (
-                    <Link
-                      key={col.id}
-                      href={`/collections/${col.id}`}
-                      className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
-                    >
-                      <span className="flex-1 truncate">{col.name}</span>
-                      <Star className="h-3 w-3 shrink-0 fill-yellow-400 text-yellow-400" />
-                    </Link>
-                  ))}
-                </nav>
+                {favoriteCollections.length > 0 && (
+                  <>
+                    <p className="px-3 pb-1 pt-1.5 text-[10px] uppercase tracking-wider text-sidebar-foreground/40">
+                      Favorites
+                    </p>
+                    <nav className="space-y-0.5 px-1">
+                      {favoriteCollections.map((col) => (
+                        <Link
+                          key={col.id}
+                          href={`/collections/${col.id}`}
+                          className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
+                        >
+                          <span className="flex-1 truncate">{col.name}</span>
+                          <Star className="h-3 w-3 shrink-0 fill-yellow-400 text-yellow-400" />
+                        </Link>
+                      ))}
+                    </nav>
+                  </>
+                )}
 
-                {/* All collections (most recent) */}
-                <p className="px-3 pb-1 pt-3 text-[10px] uppercase tracking-wider text-sidebar-foreground/40">
-                  All Collections
-                </p>
-                <nav className="space-y-0.5 px-1">
-                  {recentCollections.map((col) => (
-                    <Link
-                      key={col.id}
-                      href={`/collections/${col.id}`}
-                      className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
-                    >
-                      <span className="flex-1 truncate">{col.name}</span>
-                      <span className="text-xs text-sidebar-foreground/40 shrink-0">
-                        {col.itemCount}
-                      </span>
-                    </Link>
-                  ))}
-                </nav>
+                {/* Recents */}
+                {recentCollections.length > 0 && (
+                  <>
+                    <p className="px-3 pb-1 pt-3 text-[10px] uppercase tracking-wider text-sidebar-foreground/40">
+                      Recent
+                    </p>
+                    <nav className="space-y-0.5 px-1">
+                      {recentCollections.map((col) => (
+                        <Link
+                          key={col.id}
+                          href={`/collections/${col.id}`}
+                          className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
+                        >
+                          <span className="flex-1 truncate">{col.name}</span>
+                          {col.dominantColor && (
+                            <span
+                              className="h-2 w-2 rounded-full shrink-0"
+                              style={{ backgroundColor: col.dominantColor }}
+                            />
+                          )}
+                        </Link>
+                      ))}
+                    </nav>
+                  </>
+                )}
+
+                {/* View all link */}
+                <div className="px-1 pt-2">
+                  <Link
+                    href="/collections"
+                    className="flex items-center rounded-md px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
+                  >
+                    View all collections
+                  </Link>
+                </div>
               </div>
             )}
           </div>
@@ -186,13 +197,13 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         }`}
       >
         <div className="h-7 w-7 rounded-full bg-sidebar-primary flex items-center justify-center text-xs font-semibold text-sidebar-primary-foreground shrink-0">
-          {initials}
+          MD
         </div>
         {!collapsed && (
           <>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium truncate">{mockUser.name}</p>
-              <p className="text-xs text-sidebar-foreground/50 truncate">{mockUser.email}</p>
+              <p className="text-xs font-medium truncate">Michael Dumalag</p>
+              <p className="text-xs text-sidebar-foreground/50 truncate">michael.dumalag@gmail.com</p>
             </div>
             <Link
               href="/settings"
