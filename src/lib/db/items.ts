@@ -95,17 +95,24 @@ export type ItemTypeWithCount = {
   count: number;
 };
 
+const ITEM_TYPE_ORDER = ['snippet', 'prompt', 'command', 'note', 'file', 'image', 'link'];
+
 export async function getItemTypesWithCounts(): Promise<ItemTypeWithCount[]> {
   const types = await prisma.itemType.findMany({
     where: { isSystem: true },
     include: { _count: { select: { items: true } } },
-    orderBy: { name: 'asc' },
   });
-  return types.map((t) => ({
-    id: t.id,
-    name: t.name,
-    icon: t.icon,
-    color: t.color,
-    count: t._count.items,
-  }));
+  return types
+    .map((t) => ({
+      id: t.id,
+      name: t.name,
+      icon: t.icon,
+      color: t.color,
+      count: t._count.items,
+    }))
+    .sort((a, b) => {
+      const ai = ITEM_TYPE_ORDER.indexOf(a.name);
+      const bi = ITEM_TYPE_ORDER.indexOf(b.name);
+      return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+    });
 }
