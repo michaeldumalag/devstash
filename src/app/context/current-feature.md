@@ -1,10 +1,10 @@
 ## Current Feature
 
-Stats & Sidebar
+None
 
 ## Status
 
-completed
+Not Started
 
 ## Goals
 
@@ -41,3 +41,4 @@ completed
 - **2026-04-21** — Completed Dashboard Items. Created `src/lib/db/items.ts` (getPinnedItems, getRecentItems, getDashboardStats), updated ItemRow to use type icon/color from DB, updated StatsCards to be async server component with real counts, updated DashboardMain to fetch all data from Neon.
 - **2026-04-22** — Started Stats & Sidebar feature. Wiring real DB data into stats cards and sidebar item types/collections.
 - **2026-04-28** — Completed Stats & Sidebar. Added `getItemTypesWithCounts` and `getSidebarCollections` to DB layer; created `SidebarContext` for collapse state, `SidebarServer` async server component, and `sidebar-context.tsx`; refactored `Sidebar` to use real DB data with colored circles on recent collections and "View all collections" link; updated `DashboardShell` to accept `sidebarSlot` and provide context; updated `DashboardPage` to wire it all together.
+- **2026-05-06** — Completed Add Pro Badge to Sidebar. Added a subtle PRO badge (ShadCN `Badge`, `outline` variant) next to the files and images item types in the sidebar. Conditional on `type.name === 'file' || 'image'`, hidden when sidebar is collapsed.

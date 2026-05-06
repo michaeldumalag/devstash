@@ -8,9 +8,10 @@ A developer knowledge hub for snippets, commands, prompts, notes, files, images,
 
 Read the follwoing to get the full context of the project:
 
-- @context/project-overview.md
-- @context/coding-standards.md
-- @context/ai-interaction.md
+- @src/app/context/project-overview.md
+- @src/app/context/coding-standards.md
+- @src/app/context/ai-interaction.md
+- @src/app/context/current-feature.md
 - @context/current-feature.md
 
 ## Commands
