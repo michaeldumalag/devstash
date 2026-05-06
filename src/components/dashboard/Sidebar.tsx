@@ -15,6 +15,7 @@ import {
   Settings,
   PanelLeft,
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { useSidebarContext } from './sidebar-context';
 import type { ItemTypeWithCount } from '@/lib/db/items';
 import type { SidebarCollection } from '@/lib/db/collections';
@@ -103,6 +104,11 @@ export function Sidebar({ itemTypes, collections }: SidebarProps) {
                     {!collapsed && (
                       <>
                         <span className="flex-1 capitalize">{label}</span>
+                        {(type.name === 'file' || type.name === 'image') && (
+                          <Badge variant="outline" className="h-4 px-1 text-[10px] font-semibold tracking-wide text-sidebar-foreground/40 border-sidebar-foreground/20">
+                            PRO
+                          </Badge>
+                        )}
                         <span className="text-xs text-sidebar-foreground/40">{type.count}</span>
                       </>
                     )}
