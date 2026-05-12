@@ -59,17 +59,18 @@ function mapItem(item: {
   };
 }
 
-export async function getPinnedItems(): Promise<ItemWithMeta[]> {
+export async function getPinnedItems(userId: string): Promise<ItemWithMeta[]> {
   const items = await prisma.item.findMany({
-    where: { isPinned: true },
+    where: { isPinned: true, userId },
     orderBy: { updatedAt: 'desc' },
     select: itemSelect,
   });
   return items.map(mapItem);
 }
 
-export async function getRecentItems(limit = 10): Promise<ItemWithMeta[]> {
+export async function getRecentItems(userId: string, limit = 10): Promise<ItemWithMeta[]> {
   const items = await prisma.item.findMany({
+    where: { userId },
     orderBy: { createdAt: 'desc' },
     take: limit,
     select: itemSelect,
@@ -77,12 +78,12 @@ export async function getRecentItems(limit = 10): Promise<ItemWithMeta[]> {
   return items.map(mapItem);
 }
 
-export async function getDashboardStats(): Promise<DashboardStats> {
+export async function getDashboardStats(userId: string): Promise<DashboardStats> {
   const [totalItems, totalCollections, favoriteItems, favoriteCollections] = await Promise.all([
-    prisma.item.count(),
-    prisma.collection.count(),
-    prisma.item.count({ where: { isFavorite: true } }),
-    prisma.collection.count({ where: { isFavorite: true } }),
+    prisma.item.count({ where: { userId } }),
+    prisma.collection.count({ where: { userId } }),
+    prisma.item.count({ where: { isFavorite: true, userId } }),
+    prisma.collection.count({ where: { isFavorite: true, userId } }),
   ]);
   return { totalItems, totalCollections, favoriteItems, favoriteCollections };
 }
@@ -97,10 +98,16 @@ export type ItemTypeWithCount = {
 
 const ITEM_TYPE_ORDER = ['snippet', 'prompt', 'command', 'note', 'file', 'image', 'link'];
 
-export async function getItemTypesWithCounts(): Promise<ItemTypeWithCount[]> {
+export async function getItemTypesWithCounts(userId: string): Promise<ItemTypeWithCount[]> {
   const types = await prisma.itemType.findMany({
     where: { isSystem: true },
-    include: { _count: { select: { items: true } } },
+    select: {
+      id: true,
+      name: true,
+      icon: true,
+      color: true,
+      _count: { select: { items: { where: { userId } } } },
+    },
   });
   return types
     .map((t) => ({

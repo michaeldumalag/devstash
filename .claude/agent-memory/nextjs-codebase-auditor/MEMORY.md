@@ -1,0 +1,1 @@
+- [DevStash Architecture Snapshot](project_architecture.md) — Auth not yet implemented (intentional); no API routes or Server Actions exist yet; DB queries lack userId filters

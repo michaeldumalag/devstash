@@ -7,8 +7,9 @@ export type SidebarCollection = {
   dominantColor: string | null;
 };
 
-export async function getSidebarCollections(): Promise<SidebarCollection[]> {
+export async function getSidebarCollections(userId: string): Promise<SidebarCollection[]> {
   const collections = await prisma.collection.findMany({
+    where: { userId },
     orderBy: { updatedAt: 'desc' },
     include: {
       items: {
@@ -53,8 +54,9 @@ export type CollectionWithStats = {
   updatedAt: Date;
 };
 
-export async function getRecentCollections(): Promise<CollectionWithStats[]> {
+export async function getRecentCollections(userId: string): Promise<CollectionWithStats[]> {
   const collections = await prisma.collection.findMany({
+    where: { userId },
     orderBy: { updatedAt: 'desc' },
     take: 6,
     include: {
