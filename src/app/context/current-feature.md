@@ -1,55 +1,18 @@
 ## Current Feature
 
-Audit Quick Wins
+None
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-Fixes from the 2026-05-12 codebase audit. All are low-risk, no schema changes, no new dependencies.
-
-### 1. Add `userId` Scoping to All DB Query Functions (High)
-All functions in `src/lib/db/items.ts` and `src/lib/db/collections.ts` currently have no `userId` filter — once auth lands every user will see every other user's data. Add a `userId: string` parameter to every query function and thread it into each `where` clause now, so the signatures are ready before auth is wired.
-
-Functions to update:
-- `getPinnedItems`, `getRecentItems`, `getDashboardStats` — `src/lib/db/items.ts`
-- `getItemTypesWithCounts` — `src/lib/db/items.ts`
-- `getSidebarCollections`, `getRecentCollections` — `src/lib/db/collections.ts`
-
-Also update all callers (`DashboardMain`, `SidebarServer`, `StatsCards`) to pass a hardcoded placeholder userId (the seeded demo user's id) until real auth is implemented.
-
-### 2. Runtime Guard on `DATABASE_URL` (Medium)
-`src/lib/prisma.ts` uses `process.env.DATABASE_URL!` — if the env var is missing it throws an opaque Prisma error. Replace with an explicit check that throws a clear message at startup.
-
-### 3. Remove `'use client'` From `CollectionCard` (Medium)
-`src/components/dashboard/CollectionCard.tsx` has `'use client'` but uses no hooks, no state, and no browser APIs. Removing it allows server-side rendering for this subtree.
-
-### 4. Use `select` Instead of `include` in `getItemTypesWithCounts` (Medium)
-`src/lib/db/items.ts` — replace `include` with an explicit `select` to avoid fetching unused columns (`userId`, `isSystem`).
-
-### 5. Extract `ICON_MAP` to Shared Utility (Low)
-The same `ICON_MAP` constant is copy-pasted into three files:
-- `src/components/dashboard/CollectionCard.tsx`
-- `src/components/dashboard/ItemRow.tsx`
-- `src/components/dashboard/Sidebar.tsx`
-
-Extract to `src/lib/icon-map.ts` and import from there.
-
-### 6. Move `formatDate` to `src/lib/utils.ts` (Low)
-`src/components/dashboard/ItemRow.tsx` defines a `formatDate` utility inline. Move it to `src/lib/utils.ts`.
-
-### 7. Remove Password Hash `console.log` From Seed Script (Low)
-`prisma/seed.ts` logs the demo user's bcrypt hash to stdout. Remove the log.
-
 ## References
-
-- Audit findings from code-scanner run on 2026-05-12
 
 # Notes
 
-For goal #1: use the seeded demo user's id as a hardcoded placeholder at call sites — we'll replace with real session user once NextAuth is implemented.
+<!-- Any extra notes -->
 
 ## History
 
