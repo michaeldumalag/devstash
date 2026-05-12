@@ -1,27 +1,7 @@
-import {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link as LinkIcon,
-  Star,
-  Pin,
-} from 'lucide-react';
+import { File, Star, Pin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
-const ICON_MAP = {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link: LinkIcon,
-} as const;
-
-type IconName = keyof typeof ICON_MAP;
+import { ICON_MAP, type IconName } from '@/lib/icon-map';
+import { formatDate } from '@/lib/utils';
 
 interface ItemRowProps {
   title: string;
@@ -35,9 +15,6 @@ interface ItemRowProps {
   createdAt: Date | string;
 }
 
-function formatDate(date: Date | string) {
-  return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
 
 export function ItemRow({ title, description, typeIcon, typeColor, typeName, tags, isFavorite, isPinned, createdAt }: ItemRowProps) {
   const Icon = ICON_MAP[typeIcon as IconName] ?? File;

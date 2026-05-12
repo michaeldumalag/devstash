@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { PrismaClient, ContentType } from '../src/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
-import bcrypt from 'bcryptjs';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
@@ -37,7 +36,6 @@ async function main() {
 
   // 2. Demo user
   console.log('→ Demo user');
-  const passwordHash = await bcrypt.hash('12345678', 12);
   const user = await prisma.user.upsert({
     where: { email: 'demo@devstash.io' },
     update: {},
@@ -52,8 +50,6 @@ async function main() {
     },
   });
   console.log(`  ✓ ${user.email} (id: ${user.id})`);
-  // Log hash so it can be used when auth is wired up
-  console.log(`  ✓ Password hash (store when auth schema is added): ${passwordHash}`);
 
   // 3. Collections and items
   console.log('→ Collections & items');

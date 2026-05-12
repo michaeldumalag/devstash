@@ -1,15 +1,17 @@
 import Link from 'next/link';
 import { getRecentCollections } from '@/lib/db/collections';
 import { getPinnedItems, getRecentItems } from '@/lib/db/items';
+import { getFirstUserId } from '@/lib/db/users';
 import { StatsCards } from './StatsCards';
 import { CollectionCard } from './CollectionCard';
 import { ItemRow } from './ItemRow';
 
 export async function DashboardMain() {
+  const userId = await getFirstUserId();
   const [recentCollections, pinnedItems, recentItems] = await Promise.all([
-    getRecentCollections(),
-    getPinnedItems(),
-    getRecentItems(),
+    getRecentCollections(userId),
+    getPinnedItems(userId),
+    getRecentItems(userId),
   ]);
 
   return (
@@ -21,7 +23,7 @@ export async function DashboardMain() {
       </div>
 
       {/* Stats */}
-      <StatsCards />
+      <StatsCards userId={userId} />
 
       {/* Recent Collections */}
       <section>

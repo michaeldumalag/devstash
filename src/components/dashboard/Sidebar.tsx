@@ -2,35 +2,12 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link as LinkIcon,
-  Star,
-  ChevronDown,
-  Settings,
-  PanelLeft,
-} from 'lucide-react';
+import { Star, ChevronDown, Settings, PanelLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useSidebarContext } from './sidebar-context';
 import type { ItemTypeWithCount } from '@/lib/db/items';
 import type { SidebarCollection } from '@/lib/db/collections';
-
-const ICON_MAP = {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link: LinkIcon,
-} as const;
-
-type IconName = keyof typeof ICON_MAP;
+import { ICON_MAP, type IconName } from '@/lib/icon-map';
 
 interface SidebarProps {
   itemTypes: ItemTypeWithCount[];
